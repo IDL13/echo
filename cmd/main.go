@@ -68,16 +68,17 @@ func postHandler(c echo.Context) error {
 	datedb := string(dateHash)
 	cvvdb := string(cvvHash)
 
-	fmt.Println("____________________________")
-	fmt.Println(numberdb)
-	fmt.Println(datedb)
-	fmt.Println(cvvdb)
-	fmt.Println("____________________________")
+	fmt.Println("[Hashsum]")
+	fmt.Println("----------------------------")
+	fmt.Printf("[%s]\n", numberdb)
+	fmt.Printf("[%s]\n", datedb)
+	fmt.Printf("[%s]\n", cvvdb)
+	fmt.Println("----------------------------")
 
 	if err != nil {
 		log.Printf("Failed unmarsheling: %s", err)
 	}
 
 	log.Print("your card added")
-	return c.String(http.StatusOK, "Finish")
+	return c.String(http.StatusOK, "successful request")
 }
