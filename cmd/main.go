@@ -9,12 +9,13 @@ import (
 
 	"github.com/labstack/echo/v4"
 	"github.com/labstack/echo/v4/middleware"
+	"golang.org/x/crypto/bcrypt"
 )
 
 type Card struct {
-	Number int `json:"number"`
-	Date   int `json:"date"`
-	CVV    int `json:"CVV"`
+	Number string `json:"number"`
+	Date   string `json:"date"`
+	CVV    string `json:"CVV"`
 }
 
 func main() {
@@ -51,6 +52,27 @@ func postHandler(c echo.Context) error {
 	}
 
 	err = json.Unmarshal(b, &card)
+
+	// Convert Number, Date, CVV
+	number := []byte(card.Number)
+	date := []byte(card.Date)
+	cvv := []byte(card.CVV)
+
+	cost := 10
+
+	numberHash, _ := bcrypt.GenerateFromPassword(number, cost)
+	dateHash, _ := bcrypt.GenerateFromPassword(date, cost)
+	cvvHash, _ := bcrypt.GenerateFromPassword(cvv, cost)
+
+	numberdb := string(numberHash)
+	datedb := string(dateHash)
+	cvvdb := string(cvvHash)
+
+	fmt.Println("____________________________")
+	fmt.Println(numberdb)
+	fmt.Println(datedb)
+	fmt.Println(cvvdb)
+	fmt.Println("____________________________")
 
 	if err != nil {
 		log.Printf("Failed unmarsheling: %s", err)
