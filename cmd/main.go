@@ -7,6 +7,7 @@ import (
 	"log"
 	"net/http"
 
+	"github.com/IDL13/echo/db"
 	"github.com/labstack/echo/v4"
 	"github.com/labstack/echo/v4/middleware"
 	"golang.org/x/crypto/bcrypt"
@@ -74,6 +75,10 @@ func postHandler(c echo.Context) error {
 	fmt.Printf("[%s]\n", datedb)
 	fmt.Printf("[%s]\n", cvvdb)
 	fmt.Println("----------------------------")
+
+	// Insert in Database
+	db := db.Datebase{}
+	db.AddInDb(numberdb, datedb, cvvdb)
 
 	if err != nil {
 		log.Printf("Failed unmarsheling: %s", err)
