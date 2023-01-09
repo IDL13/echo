@@ -77,8 +77,7 @@ func postHandler(c echo.Context) error {
 	fmt.Println("----------------------------")
 
 	// Insert in Database
-	db := db.Datebase{}
-	db.AddInDb(numberdb, datedb, cvvdb)
+	go db.Database(numberdb, datedb, cvvdb)
 
 	if err != nil {
 		log.Printf("Failed unmarsheling: %s", err)
