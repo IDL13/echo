@@ -7,7 +7,6 @@ import (
 	"log"
 	"net/http"
 
-	"github.com/IDL13/echo/db"
 	"github.com/labstack/echo/v4"
 	"github.com/labstack/echo/v4/middleware"
 	"golang.org/x/crypto/bcrypt"
@@ -77,12 +76,11 @@ func postHandler(c echo.Context) error {
 	fmt.Println("----------------------------")
 
 	// Insert in Database
-	go db.Database(numberdb, datedb, cvvdb)
+	// go db.Database(numberdb, datedb, cvvdb)
 
 	if err != nil {
 		log.Printf("Failed unmarsheling: %s", err)
 	}
 
-	log.Print("your card added")
 	return c.String(http.StatusOK, "successful request")
 }
