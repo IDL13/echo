@@ -3,27 +3,30 @@ package config
 import (
 	"log"
 	"os"
+	"sync"
 
 	"gopkg.in/yaml.v3"
 )
 
 type Config struct {
-	username string `yaml:"username"`
-	password string `yaml:"password"`
-	host     string `yaml:"host"`
-	port     string `yaml:"port"`
-	database string `yaml:"database"`
+	Username string `yaml:"username"`
+	Password string `yaml:"password"`
+	Host     string `yaml:"host"`
+	Port     string `yaml:"port"`
+	Database string `yaml:"database"`
 }
 
-func ReadConf() *Config {
-	con := &Config{}
+var instance *Config
+var once sync.Once
 
-	conf_date, err := os.ReadFile("conf.yml")
-	if err != nil {
-		log.Fatal("Read conf error")
-	}
+func GetConf() *Config {
+	once.Do(func() {
+		conf_date, err := os.ReadFile("conf.yml")
+		if err != nil {
+			log.Fatal("Read conf error")
+		}
 
-	yaml.Unmarshal(conf_date, con)
-
-	return con
+		yaml.Unmarshal(conf_date, instance)
+	})
+	return instance
 }
