@@ -7,6 +7,7 @@ import (
 	"os"
 	"time"
 
+	config "github.com/IDL13/echo/internal/config"
 	reconection "github.com/IDL13/echo/pkg/utils"
 	"github.com/jackc/pgconn"
 	"github.com/jackc/pgx/v4/pgxpool"
@@ -20,7 +21,7 @@ type Client interface {
 	Begin(ctx context.Context) (pgx.Tx, error)
 }
 
-func NewClient(ctx context.Context, maxAttempts int) (pool *pgxpool.Pool, err error) {
+func NewClient(ctx context.Context, maxAttempts int, con config.Config) (pool *pgxpool.Pool, err error) {
 	dsn := fmt.Sprintf("postgresql://%s:%s@%s:%s/%s", os.Getenv("USERNAME"), os.Getenv("PASSWORD"), os.Getenv("HOST"), os.Getenv("PORT"), os.Getenv("DATABASE"))
 	err = reconection.Tries(func() error {
 		ctx, cancel := context.WithTimeout(ctx, 5*time.Second)
