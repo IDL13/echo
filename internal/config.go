@@ -21,7 +21,7 @@ var once sync.Once
 
 func GetConf() *Config {
 	once.Do(func() {
-		conf_date, err := os.ReadFile("conf.yml")
+		conf_date, err := os.ReadFile("config.yml")
 		if err != nil {
 			log.Fatal("Read conf error")
 		}
