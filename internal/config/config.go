@@ -1,9 +1,8 @@
-package config
+package Config
 
 import (
 	"log"
 	"os"
-	"sync"
 
 	"gopkg.in/yaml.v3"
 )
@@ -16,17 +15,12 @@ type Config struct {
 	Database string `yaml:"database"`
 }
 
-var instance *Config
-var once sync.Once
-
 func GetConf() *Config {
-	once.Do(func() {
-		conf_date, err := os.ReadFile("config.yml")
-		if err != nil {
-			log.Fatal("Read conf error")
-		}
-
-		yaml.Unmarshal(conf_date, instance)
-	})
-	return instance
+	c := &Config{}
+	info, err := os.ReadFile("Z:/PROGRAMS/GO/echo/conf.yaml")
+	if err != nil {
+		log.Fatal("Error in read conf file")
+	}
+	yaml.Unmarshal(info, c)
+	return c
 }

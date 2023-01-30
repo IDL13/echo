@@ -1,6 +1,7 @@
 package handler
 
 import (
+	"fmt"
 	"log"
 	"net/http"
 
@@ -31,8 +32,11 @@ func (h *Handler) PostHandler(c echo.Context) error {
 	h.d = encryption.New()
 	h.database = db.New()
 
-	h.d.Encryption(c)
-	err := h.database.Insert()
+	date, err := h.d.Encryption(c)
+	if err != nil {
+		fmt.Println("Error in Encryption")
+	}
+	err = h.database.Insert(date)
 	if err != nil {
 		log.Fatal("E-R-R-O-R")
 	}

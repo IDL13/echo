@@ -1,5 +1,0 @@
- username: "echo"
- password: "root6895963"
- host:  "localhost"
- port: "5432"
- database: "echo"
