@@ -2,7 +2,6 @@ package handler
 
 import (
 	"fmt"
-	"log"
 	"net/http"
 
 	"github.com/IDL13/echo/internal/db"
@@ -32,14 +31,18 @@ func (h *Handler) PostHandler(c echo.Context) error {
 	h.d = encryption.New()
 	h.database = db.New()
 
-	date, err := h.d.Encryption(c)
+	// date, err := h.d.Encryption(c)
+	// if err != nil {
+	// 	fmt.Println("Error in Encryption")
+	// }
+	err := h.database.FindAll()
 	if err != nil {
-		fmt.Println("Error in Encryption")
+		fmt.Println(err)
 	}
-	err = h.database.Insert(date)
-	if err != nil {
-		log.Fatal("E-R-R-O-R")
-	}
+	// err = h.database.Insert(date)
+	// if err != nil {
+	// 	log.Fatal("E-R-R-O-R")
+	// }
 
 	return c.String(http.StatusOK, "successful request")
 }
