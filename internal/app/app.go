@@ -18,8 +18,11 @@ func New() (*App, error) {
 	a.h = handler.New()
 	a.echo = echo.New()
 
-	a.echo.GET("/", a.h.GetHandler)
-	a.echo.POST("/post", a.h.PostHandler)
+	a.echo.GET("/", a.h.StartHandler)
+	a.echo.GET("/findAll", a.h.FindAllHandler)
+
+	a.echo.POST("/addOne", a.h.AddOneHandler)
+	a.echo.POST("/findOne", a.h.FindOneHandler)
 
 	return a, nil
 }
