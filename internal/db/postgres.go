@@ -7,6 +7,7 @@ import (
 
 	config "github.com/IDL13/echo/internal/config"
 	"github.com/IDL13/echo/internal/encryption"
+	"github.com/IDL13/echo/internal/unmarshal"
 	"github.com/IDL13/echo/pkg/postgresql"
 )
 
@@ -22,7 +23,7 @@ func (r *Repository) Insert(date *encryption.Date) error {
 	cfg := config.GetConf()
 	conn, err := r.client.NewClient(*cfg)
 	if err != nil {
-		fmt.Println("E-R-R-O-R")
+		fmt.Println("Error from NewClient")
 	}
 
 	q := `INSERT INTO card (number, date, cvv) VALUES ($1, $2, $3) RETURNING number`
@@ -65,19 +66,19 @@ func (r *Repository) FindAll() (mas []string) {
 	return m
 }
 
-func (r *Repository) FindOne(name string) (err error) {
+func (r *Repository) FindOne(n *unmarshal.Name) (err error) {
 	cfg := config.GetConf()
 	conn, err := r.client.NewClient(*cfg)
 	if err != nil {
-		log.Println("error")
+		log.Println("Error from configfile")
 	}
 
 	var card Card
 
 	q := `SELECT * FROM public.card WHERE number = $1`
-	err = conn.QueryRow(context.Background(), q, name).Scan(&card.Number, &card.Date, &card.CVV)
+	err = conn.QueryRow(context.Background(), q, n.Name).Scan(&card.Number, &card.Date, &card.CVV)
 	if err != nil {
-		log.Println("error")
+		log.Println("Error in QueryRow")
 	}
 	log.Printf("Number:%s", card.Number)
 	log.Printf("Date:%s", card.Number)
