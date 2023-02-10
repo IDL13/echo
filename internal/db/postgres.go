@@ -23,18 +23,18 @@ func (r *Repository) Insert(date *encryption.Date) error {
 	cfg := config.GetConf()
 	conn, err := r.client.NewClient(*cfg)
 	if err != nil {
-		fmt.Println("Error from NewClient")
+		log.Println("Error from NewClient")
 	}
 
 	q := `INSERT INTO card (number, date, cvv) VALUES ($1, $2, $3) RETURNING number`
 	err = conn.QueryRow(context.TODO(), q, date.Number, date.Date, date.CVV).Scan(&date.Number, &date.Date, &date.CVV)
 	if err != nil {
-		fmt.Println(err)
+		log.Println(err)
 	}
 
 	defer conn.Close(context.TODO())
 
-	fmt.Println("successful ading")
+	log.Println("successful ading")
 	return nil
 }
 
@@ -42,7 +42,7 @@ func (r *Repository) FindAll() (mas []string) {
 	cfg := config.GetConf()
 	conn, err := r.client.NewClient(*cfg)
 	if err != nil {
-		log.Println("error")
+		log.Println("Error")
 	}
 
 	var m []string
@@ -50,7 +50,7 @@ func (r *Repository) FindAll() (mas []string) {
 	q := `SELECT number FROM public.card`
 	all, _ := conn.Query(context.Background(), q)
 	if err != nil {
-		log.Println("error")
+		log.Println("Error")
 	}
 
 	for all.Next() {
@@ -59,7 +59,7 @@ func (r *Repository) FindAll() (mas []string) {
 		err = all.Scan(&card.Number)
 		m = append(m, card.Number)
 		if err != nil {
-			fmt.Println("error in FindAll")
+			log.Println("Error in FindAll")
 		}
 		log.Println(card.Number)
 	}
@@ -80,9 +80,9 @@ func (r *Repository) FindOne(n *unmarshal.Name) (err error) {
 	if err != nil {
 		log.Println("Error in QueryRow")
 	}
-	log.Printf("Number:%s", card.Number)
-	log.Printf("Date:%s", card.Number)
-	log.Printf("CVV:%s", card.Number)
+	fmt.Printf("Number:%s", card.Number)
+	fmt.Printf("Date:%s", card.Number)
+	fmt.Printf("CVV:%s", card.Number)
 
 	return nil
 

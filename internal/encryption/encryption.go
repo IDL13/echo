@@ -43,13 +43,6 @@ func (d *Date) Encryption(c echo.Context) (*Date, error) {
 	d.Date = string(dateHash)
 	d.CVV = string(cvvHash)
 
-	// fmt.Println("[Hashsum]")
-	// fmt.Println("----------------------------")
-	// fmt.Printf("[%s]\n", numberdb)
-	// fmt.Printf("[%s]\n", datedb)
-	// fmt.Printf("[%s]\n", cvvdb)
-	// fmt.Println("----------------------------")
-
 	if err != nil {
 		log.Printf("Failed unmarsheling: %s", err)
 	}

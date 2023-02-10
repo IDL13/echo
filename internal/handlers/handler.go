@@ -1,7 +1,6 @@
 package handler
 
 import (
-	"fmt"
 	"log"
 	"net/http"
 
@@ -50,7 +49,7 @@ func (h *Handler) AddOneHandler(c echo.Context) error {
 
 	date, err := h.d.Encryption(c)
 	if err != nil {
-		fmt.Println("Error in Encryption")
+		log.Println("Error in Encryption")
 	}
 	err = h.database.Insert(date)
 	if err != nil {
@@ -69,7 +68,7 @@ func (h *Handler) FindOneHandler(c echo.Context) error {
 
 	err := h.database.FindOne(name)
 	if err != nil {
-		fmt.Println(err)
+		log.Println(err)
 	}
 	return c.String(http.StatusOK, "successful request")
 }
