@@ -9,6 +9,7 @@ import (
 	"github.com/IDL13/echo/internal/encryption"
 	"github.com/IDL13/echo/internal/unmarshal"
 	"github.com/IDL13/echo/pkg/postgresql"
+	"github.com/IDL13/echo/pkg/utils"
 )
 
 func New() *Repository {
@@ -23,13 +24,13 @@ func (r *Repository) Insert(date *encryption.Date) error {
 	cfg := config.GetConf()
 	conn, err := r.client.NewClient(*cfg)
 	if err != nil {
-		log.Println("Error from NewClient")
+		utils.Loger(err)
 	}
 
 	q := `INSERT INTO card (number, date, cvv) VALUES ($1, $2, $3) RETURNING number`
 	err = conn.QueryRow(context.TODO(), q, date.Number, date.Date, date.CVV).Scan(&date.Number, &date.Date, &date.CVV)
 	if err != nil {
-		log.Println(err)
+		utils.Loger(err)
 	}
 
 	defer conn.Close(context.TODO())
@@ -42,7 +43,7 @@ func (r *Repository) FindAll() (mas []string) {
 	cfg := config.GetConf()
 	conn, err := r.client.NewClient(*cfg)
 	if err != nil {
-		log.Println("Error")
+		utils.Loger(err)
 	}
 
 	var m []string
@@ -50,7 +51,7 @@ func (r *Repository) FindAll() (mas []string) {
 	q := `SELECT number FROM public.card`
 	all, _ := conn.Query(context.Background(), q)
 	if err != nil {
-		log.Println("Error")
+		utils.Loger(err)
 	}
 
 	for all.Next() {
@@ -59,7 +60,7 @@ func (r *Repository) FindAll() (mas []string) {
 		err = all.Scan(&card.Number)
 		m = append(m, card.Number)
 		if err != nil {
-			log.Println("Error in FindAll")
+			utils.Loger(err)
 		}
 		log.Println(card.Number)
 	}
@@ -70,7 +71,7 @@ func (r *Repository) FindOne(n *unmarshal.Name) (err error) {
 	cfg := config.GetConf()
 	conn, err := r.client.NewClient(*cfg)
 	if err != nil {
-		log.Println("Error from configfile")
+		utils.Loger(err)
 	}
 
 	var card Card
@@ -78,7 +79,7 @@ func (r *Repository) FindOne(n *unmarshal.Name) (err error) {
 	q := `SELECT * FROM public.card WHERE number = $1`
 	err = conn.QueryRow(context.Background(), q, n.Name).Scan(&card.Number, &card.Date, &card.CVV)
 	if err != nil {
-		log.Println("Error in QueryRow")
+		utils.Loger(err)
 	}
 	fmt.Printf("Number:%s", card.Number)
 	fmt.Printf("Date:%s", card.Number)
