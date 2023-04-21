@@ -9,6 +9,9 @@ import (
 	"golang.org/x/crypto/bcrypt"
 )
 
+const SALT1 string = "L8F?N5goKvJ90MZl"
+const SALT2 string = "8SPea4dzvL_g0XFK"
+
 func New() *Date {
 	return &Date{}
 }
@@ -29,19 +32,13 @@ func (d *Date) Encryption(c echo.Context) (*Date, error) {
 	err = json.Unmarshal(b, &d)
 
 	// Convert Number, Date, CVV
-	number := []byte(d.Number)
-	date := []byte(d.Date)
 	cvv := []byte(d.CVV)
 
 	cost := 10
 
-	numberHash, _ := bcrypt.GenerateFromPassword(number, cost)
-	dateHash, _ := bcrypt.GenerateFromPassword(date, cost)
 	cvvHash, _ := bcrypt.GenerateFromPassword(cvv, cost)
 
-	d.Number = string(numberHash)
-	d.Date = string(dateHash)
-	d.CVV = string(cvvHash)
+	d.CVV = SALT1 + string(cvvHash) + SALT2
 
 	if err != nil {
 		log.Printf("Failed unmarsheling: %s", err)

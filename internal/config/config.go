@@ -17,7 +17,7 @@ type Config struct {
 
 func GetConf() *Config {
 	c := &Config{}
-	info, err := os.ReadFile("Z:/PROGRAMS/GO/echo/conf.yaml")
+	info, err := os.ReadFile("conf.yaml")
 	if err != nil {
 		log.Fatal("Error in read conf file")
 	}
