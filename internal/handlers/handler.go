@@ -1,6 +1,7 @@
 package handler
 
 import (
+	"context"
 	"log"
 	"net/http"
 
@@ -12,7 +13,7 @@ import (
 
 type Handler struct {
 	d        *encryption.Date
-	database *db.Repository
+	database db.Repository
 	n        *unmarshal.Name
 }
 
@@ -29,10 +30,12 @@ func (h *Handler) StartHandler(c echo.Context) error {
 }
 
 func (h *Handler) FindAllHandler(c echo.Context) error {
-	h.database = db.New()
-	text := h.database.FindAll()
+	text, err := h.database.FindAll(context.TODO())
+	if err != nil {
+		panic(err)
+	}
 	for _, val := range text {
-		if err := c.String(http.StatusOK, val); err != nil {
+		if err := c.String(http.StatusOK, val.Number); err != nil {
 			log.Println(err)
 		}
 		if err := c.String(http.StatusOK, "\n"); err != nil {
@@ -45,13 +48,12 @@ func (h *Handler) FindAllHandler(c echo.Context) error {
 func (h *Handler) AddOneHandler(c echo.Context) error {
 
 	h.d = encryption.New()
-	h.database = db.New()
 
 	date, err := h.d.Encryption(c)
 	if err != nil {
 		log.Println("Error in Encryption")
 	}
-	err = h.database.Insert(date)
+	err = h.database.Insert(context.TODO(), date)
 	if err != nil {
 		log.Fatal("Error from database INSERT")
 	}
@@ -61,12 +63,11 @@ func (h *Handler) AddOneHandler(c echo.Context) error {
 
 func (h *Handler) FindOneHandler(c echo.Context) error {
 
-	h.database = db.New()
 	h.n = unmarshal.New()
 
 	name := h.n.Unmarshal(c)
 
-	err := h.database.FindOne(name)
+	err := h.database.FindOne(context.TODO(), name)
 	if err != nil {
 		log.Println(err)
 	}
