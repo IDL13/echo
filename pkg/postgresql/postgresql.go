@@ -7,16 +7,17 @@ import (
 
 	config "github.com/IDL13/echo/internal/config"
 	"github.com/jackc/pgx/v5"
+	"github.com/jackc/pgx/v5/pgconn"
 )
 
-func New() *Client {
-	return &Client{}
+type Client interface {
+	Exec(ctx context.Context, sql string, arguments ...any) (pgconn.CommandTag, error)
+	Query(ctx context.Context, sql string, args ...any) (pgx.Rows, error)
+	QueryRow(ctx context.Context, sql string, args ...any) pgx.Row
+	Begin(ctx context.Context) (pgx.Tx, error)
 }
 
-type Client struct {
-}
-
-func (c *Client) NewClient(cfg config.Config) (conn *pgx.Conn, err error) {
+func NewClient(cfg config.Config) (conn *pgx.Conn, err error) {
 	q := fmt.Sprintf("postgres://%s:%s@%s:%s/%s", cfg.Username, cfg.Password, cfg.Host, cfg.Port, cfg.Database)
 	conn, err = pgx.Connect(context.Background(), q)
 	if err != nil {
