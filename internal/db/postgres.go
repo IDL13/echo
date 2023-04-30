@@ -15,10 +15,6 @@ import (
 	"github.com/jackc/pgx/v5/pgconn"
 )
 
-// func New() *Repository {
-// 	return &Repository{}
-// }
-
 func New(c postgresql.Client) Repository {
 	r := repository{
 		client: c,

@@ -65,6 +65,7 @@ func (h *Handler) AddOneHandler(c echo.Context) error {
 	h.n = unmarshal.New()
 
 	date, err := h.d.Encryption(c)
+
 	if err != nil {
 		log.Fatal(err)
 	}
