@@ -74,11 +74,17 @@ func (r *repository) Insert(ctx context.Context, card *encryption.Date) error {
 // }
 
 func (r *repository) FindAll(ctx context.Context) (mas []Card, err error) {
+	cfg := config.GetConf()
+	conn, err := postgresql.NewClient(*cfg)
+	if err != nil {
+		log.Fatal(err)
+	}
+
 	var m []Card
 	// m := make([]Card, 0)
 
-	q := `SELECT number, date FROM public.card`
-	all, _ := r.client.Query(ctx, q)
+	q := `SELECT number, date, cvv FROM card`
+	all, _ := conn.Query(ctx, q)
 	if err != nil {
 		utils.Loger(err)
 	}
@@ -126,11 +132,17 @@ func (r *repository) FindAll(ctx context.Context) (mas []Card, err error) {
 // }
 
 func (r *repository) FindOne(ctx context.Context, number *unmarshal.Name) error {
+	cfg := config.GetConf()
+	conn, err := postgresql.NewClient(*cfg)
+	if err != nil {
+		log.Fatal(err)
+	}
+
 	var card Card
 
 	q := `SELECT * FROM public.card WHERE number = $1`
 
-	err := r.client.QueryRow(ctx, q, number).Scan(&card.Number, &card.Date, &card.CVV)
+	err = conn.QueryRow(ctx, q, number).Scan(&card.Number, &card.Date, &card.CVV)
 	if err != nil {
 		utils.Loger(err)
 	}

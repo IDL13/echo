@@ -4,8 +4,10 @@ import (
 	"context"
 	"testing"
 
+	"github.com/IDL13/echo/internal/db"
 	"github.com/IDL13/echo/internal/encryption"
 	mock_serv "github.com/IDL13/echo/internal/mock"
+	"github.com/IDL13/echo/internal/unmarshal"
 	"github.com/golang/mock/gomock"
 	"github.com/stretchr/testify/require"
 )
@@ -31,91 +33,36 @@ func TestAddOneHandler(t *testing.T) {
 	require.NoError(t, err)
 }
 
-// func TestFindAll(t *testing.T) {
-// 	ctrl := gomock.NewController(t)
-// 	defer ctrl.Finish()
+func TestFindAll(t *testing.T) {
+	ctrl := gomock.NewController(t)
+	defer ctrl.Finish()
 
-// 	repo := mock_serv.NewMockRepository(ctrl)
+	repo := mock_serv.NewMockRepository(ctrl)
 
-// 	ctx := context.TODO()
+	ctx := context.TODO()
 
-// 	mas := []
+	var text []db.Card
 
-// 	repo.EXPECT().FindAll(ctx).Return(, nil )
+	repo.EXPECT().FindAll(ctx).Return(text, nil)
 
-// 	text, err := repo.FindAll(ctx)
-// }
+	text, err := repo.FindAll(ctx)
 
-// func TestInsertOneHandler(t *testing.T) {
-// 	type mockBehaviour func(m *mock_serv.MockRepository, card *encryption.Date)
+	require.NoError(t, err)
+}
 
-// 	tests := []struct {
-// 		name          string
-// 		mockBehaviour mockBehaviour
-// 		date          *encryption.Date
-// 		input         string
-// 		status        int
-// 	}{
-// 		{
-// 			name: "OK",
-// 			mockBehaviour: func(m *mock_serv.MockRepository, card *encryption.Date) {
-// 				m.EXPECT().Insert(context.TODO(), card).Times(1).Return(nil)
-// 			},
-// 			date: &encryption.Date{
-// 				Number: "Adolf",
-// 				Date:   "12.12",
-// 				CVV:    "453",
-// 			},
-// 			input: `{
-// 				"number":"Nabokov", "date":"12.12", "CVV":"453"
-// 			}`,
-// 			status: 400,
-// 		},
+func TestFindOne(t *testing.T) {
+	ctrl := gomock.NewController(t)
+	defer ctrl.Finish()
 
-// 		{
-// 			name: "NO",
-// 			mockBehaviour: func(m *mock_serv.MockRepository, card *encryption.Date) {
-// 				m.EXPECT().Insert(context.TODO(), card).Return(nil)
-// 			},
-// 			date: &encryption.Date{
-// 				Number: "Adolf",
-// 				Date:   "12.12",
-// 				CVV:    "L8F?N5goKvJ90MZl$2a$10$/E7bXIWqtxQoHVxByLWjvO7VJxPEOcsQreMeY.a9I35/Ih6QVxxzy8SPea4dzvL_g0XFK",
-// 			},
-// 			input: `{
-// 				"number":"Nabokov", "date":"12.12", "CVV":"453"
-// 			}`,
-// 			status: 200,
-// 		},
-// 	}
+	repo := mock_serv.NewMockRepository(ctrl)
 
-// 	for _, test := range tests {
-// 		t.Run(test.name, func(t *testing.T) {
-// 			controler := gomock.NewController(t)
-// 			defer controler.Finish()
+	ctx := context.TODO()
 
-// 			auth := mock_serv.NewMockRepository(controler)
+	text := &unmarshal.Name{Name: "Nabokov"}
 
-// 			test.mockBehaviour(auth, test.date)
+	repo.EXPECT().FindOne(ctx, text).Return(nil)
 
-// 			if test.status != 400 {
-// 				t.Error("not 400")
-// 			}
+	err := repo.FindOne(ctx, text)
 
-// 			// //Создание тестового сервера
-// 			// e := echo.New()
-// 			// h := New()
-// 			// e.POST("/test", h.AddOneHandler)
-
-// 			// // //Отправка тестового POST запроса
-// 			// w := httptest.NewRecorder()
-// 			// req := httptest.NewRequest("POST", "/test", bytes.NewBufferString(test.input))
-
-// 			// e.ServeHTTP(w, req)
-
-// 			//Проверка на соответствие
-// 			// assert.Equal(t, 400, test.status)
-// 		})
-// 	}
-
-// }
+	require.NoError(t, err)
+}
