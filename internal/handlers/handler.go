@@ -5,11 +5,9 @@ import (
 	"log"
 	"net/http"
 
-	"github.com/IDL13/echo/internal/config"
 	"github.com/IDL13/echo/internal/db"
 	"github.com/IDL13/echo/internal/encryption"
 	"github.com/IDL13/echo/internal/unmarshal"
-	"github.com/IDL13/echo/pkg/postgresql"
 	"github.com/labstack/echo/v4"
 )
 
@@ -31,12 +29,14 @@ func (h *Handler) StartHandler(c echo.Context) error {
 }
 
 func (h *Handler) FindAllHandler(c echo.Context) error {
-	cfg := config.GetConf()
-	conn, err := postgresql.NewClient(*cfg)
-	if err != nil {
-		log.Fatal(err)
-	}
-	r := db.New(conn)
+	// cfg := config.GetConf()
+	// conn, err := postgresql.NewClient(*cfg)
+	// if err != nil {
+	// 	log.Fatal(err)
+	// }
+	// r := db.New(conn)
+
+	r := db.New()
 
 	text, err := r.FindAll(context.TODO())
 	if err != nil {
@@ -54,12 +54,13 @@ func (h *Handler) FindAllHandler(c echo.Context) error {
 }
 
 func (h *Handler) AddOneHandler(c echo.Context) error {
-	cfg := config.GetConf()
-	conn, err := postgresql.NewClient(*cfg)
-	if err != nil {
-		log.Fatal(err)
-	}
-	r := db.New(conn)
+	// cfg := config.GetConf()
+	// conn, err := postgresql.NewClient(*cfg)
+	// if err != nil {
+	// 	log.Fatal(err)
+	// }
+	// r := db.New(conn)
+	r := db.New()
 
 	h.d = encryption.New()
 	h.n = unmarshal.New()
@@ -79,18 +80,20 @@ func (h *Handler) AddOneHandler(c echo.Context) error {
 }
 
 func (h *Handler) FindOneHandler(c echo.Context) error {
-	cfg := config.GetConf()
-	conn, err := postgresql.NewClient(*cfg)
-	if err != nil {
-		log.Fatal(err)
-	}
-	r := db.New(conn)
+	// cfg := config.GetConf()
+	// conn, err := postgresql.NewClient(*cfg)
+	// if err != nil {
+	// 	log.Fatal(err)
+	// }
+	// r := db.New(conn)
+
+	r := db.New()
 
 	h.n = unmarshal.New()
 
 	name := h.n.Unmarshal(c)
 
-	err = r.FindOne(context.TODO(), name)
+	err := r.FindOne(context.TODO(), name)
 	if err != nil {
 		log.Println(err)
 	}

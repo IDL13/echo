@@ -8,6 +8,7 @@ import (
 	// "fmt"
 	"log"
 
+	"github.com/IDL13/echo/internal/config"
 	"github.com/IDL13/echo/internal/encryption"
 	"github.com/IDL13/echo/internal/unmarshal"
 	"github.com/IDL13/echo/pkg/postgresql"
@@ -15,20 +16,31 @@ import (
 	"github.com/jackc/pgx/v5/pgconn"
 )
 
-func New(c postgresql.Client) Repository {
-	r := repository{
-		client: c,
-	}
+func New() Repository {
+	r := repository{}
 	return &r
 }
+
+// func New(c postgresql.Client) Repository {
+// 	r := repository{
+// 		client: c,
+// 	}
+// 	return &r
+// }
 
 type repository struct {
 	client postgresql.Client
 }
 
 func (r *repository) Insert(ctx context.Context, card *encryption.Date) error {
+	cfg := config.GetConf()
+	conn, err := postgresql.NewClient(*cfg)
+	if err != nil {
+		log.Fatal(err)
+	}
+
 	q := `INSERT INTO card (number, date, cvv) VALUES ($1, $2, $3) RETURNING number`
-	err := r.client.QueryRow(context.TODO(), q, card.Number, card.Date, card.CVV).Scan(&card.Number, &card.Date, &card.CVV)
+	err = conn.QueryRow(context.TODO(), q, card.Number, card.Date, card.CVV).Scan(&card.Number, &card.Date, &card.CVV)
 	if err != nil {
 		var pgErr *pgconn.PgError
 		if errors.As(err, &pgErr) {
