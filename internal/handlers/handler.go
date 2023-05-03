@@ -29,12 +29,6 @@ func (h *Handler) StartHandler(c echo.Context) error {
 }
 
 func (h *Handler) FindAllHandler(c echo.Context) error {
-	// cfg := config.GetConf()
-	// conn, err := postgresql.NewClient(*cfg)
-	// if err != nil {
-	// 	log.Fatal(err)
-	// }
-	// r := db.New(conn)
 
 	r := db.New()
 
@@ -54,12 +48,6 @@ func (h *Handler) FindAllHandler(c echo.Context) error {
 }
 
 func (h *Handler) AddOneHandler(c echo.Context) error {
-	// cfg := config.GetConf()
-	// conn, err := postgresql.NewClient(*cfg)
-	// if err != nil {
-	// 	log.Fatal(err)
-	// }
-	// r := db.New(conn)
 	r := db.New()
 
 	h.d = encryption.New()
@@ -80,13 +68,6 @@ func (h *Handler) AddOneHandler(c echo.Context) error {
 }
 
 func (h *Handler) FindOneHandler(c echo.Context) error {
-	// cfg := config.GetConf()
-	// conn, err := postgresql.NewClient(*cfg)
-	// if err != nil {
-	// 	log.Fatal(err)
-	// }
-	// r := db.New(conn)
-
 	r := db.New()
 
 	h.n = unmarshal.New()

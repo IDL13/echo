@@ -7,6 +7,7 @@ import (
 	"github.com/IDL13/echo/internal/unmarshal"
 )
 
+// generate mock repository
 //go:generate mockgen -source=store.go -destination=../mock/mock.go -package=mock_serv
 type Repository interface {
 	Insert(ctx context.Context, card *encryption.Date) error
