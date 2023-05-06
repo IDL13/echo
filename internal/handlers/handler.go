@@ -8,7 +8,9 @@ import (
 	"github.com/IDL13/echo/internal/db"
 	"github.com/IDL13/echo/internal/encryption"
 	"github.com/IDL13/echo/internal/unmarshal"
+	"github.com/IDL13/echo/pkg/api"
 	"github.com/labstack/echo/v4"
+	"google.golang.org/grpc"
 )
 
 func New() *Handler {
@@ -25,6 +27,26 @@ func (h *Handler) StartHandler(c echo.Context) error {
 	if err != nil {
 		return err
 	}
+	return nil
+}
+
+func (h *Handler) SmtpHandler(c echo.Context) error {
+
+	date := unmarshal.NewDate()
+	date.Unmarshal(c)
+
+	conn, err := grpc.Dial(":8081", grpc.WithInsecure())
+	if err != nil {
+		log.Fatal(err)
+	}
+
+	genConn := api.NewAdderClient(conn)
+	res, err := genConn.Add(context.TODO(), &api.AddRequest{Email: date.Email, Msg: date.Msg})
+	if err != nil {
+		log.Fatal(err)
+	}
+
+	log.Println(res.GetResult())
 	return nil
 }
 

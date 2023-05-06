@@ -12,8 +12,17 @@ func New() *Name {
 	return &Name{}
 }
 
+func NewDate() *Date {
+	return &Date{}
+}
+
 type Name struct {
 	Name string `json:"name"`
+}
+
+type Date struct {
+	Email string `json:"email"`
+	Msg   string `json:"msg"`
 }
 
 func (n *Name) Unmarshal(c echo.Context) *Name {
@@ -30,4 +39,16 @@ func (n *Name) Unmarshal(c echo.Context) *Name {
 	}
 
 	return n
+}
+
+func (d *Date) Unmarshal(c echo.Context) *Date {
+
+	defer c.Request().Body.Close()
+	b, err := ioutil.ReadAll(c.Request().Body)
+	if err != nil {
+		log.Printf("Failed reading the request body: %s", err)
+	}
+
+	err = json.Unmarshal(b, &d)
+	return d
 }

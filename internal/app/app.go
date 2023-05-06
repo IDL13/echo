@@ -23,6 +23,7 @@ func New() (*App, error) {
 
 	a.echo.POST("/addOne", a.h.AddOneHandler)
 	a.echo.POST("/findOne", a.h.FindOneHandler)
+	a.echo.POST("/smtp", a.h.SmtpHandler)
 
 	return a, nil
 }
