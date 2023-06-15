@@ -81,10 +81,10 @@ func (h *Handler) AddOneHandler(c echo.Context) error {
 		log.Fatal(err)
 	}
 
-	err = r.Insert(context.TODO(), date)
-	if err != nil {
-		log.Fatal(err)
-	}
+	go r.Insert(context.TODO(), date)
+	// if err != nil {
+	// 	log.Fatal(err)
+	// }
 
 	return c.String(http.StatusOK, "successful request")
 }
@@ -96,9 +96,9 @@ func (h *Handler) FindOneHandler(c echo.Context) error {
 
 	name := h.n.Unmarshal(c)
 
-	err := r.FindOne(context.TODO(), name)
-	if err != nil {
-		log.Println(err)
-	}
+	go r.FindOne(context.TODO(), name)
+	// if err != nil {
+	// 	log.Println(err)
+	// }
 	return c.String(http.StatusOK, "successful request")
 }
