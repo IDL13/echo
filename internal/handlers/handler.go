@@ -4,6 +4,7 @@ import (
 	"context"
 	"log"
 	"net/http"
+	"strconv"
 
 	"github.com/IDL13/echo/internal/db"
 	"github.com/IDL13/echo/internal/encryption"
@@ -100,5 +101,17 @@ func (h *Handler) FindOneHandler(c echo.Context) error {
 	// if err != nil {
 	// 	log.Println(err)
 	// }
+	return c.String(http.StatusOK, "successful request")
+}
+
+func (h *Handler) DeleteHandler(c echo.Context) error {
+	r := db.New()
+
+	id, _ := strconv.Atoi(c.Param("id"))
+
+	err := r.Delete(context.TODO(), id)
+	if err != nil {
+		log.Println(err)
+	}
 	return c.String(http.StatusOK, "successful request")
 }

@@ -25,6 +25,8 @@ func New() (*App, error) {
 	a.echo.POST("/findOne", a.h.FindOneHandler)
 	a.echo.POST("/smtp", a.h.SmtpHandler)
 
+	a.echo.DELETE("delete/:id", a.h.DeleteHandler)
+
 	return a, nil
 }
 
