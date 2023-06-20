@@ -27,6 +27,8 @@ func New() (*App, error) {
 
 	a.echo.DELETE("delete/:id", a.h.DeleteHandler)
 
+	a.echo.PUT("put/:id", a.h.PutHandler)
+
 	return a, nil
 }
 

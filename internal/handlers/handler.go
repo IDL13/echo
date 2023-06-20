@@ -115,3 +115,15 @@ func (h *Handler) DeleteHandler(c echo.Context) error {
 	}
 	return c.String(http.StatusOK, "successful request")
 }
+
+func (h *Handler) PutHandler(c echo.Context) error {
+	r := db.New()
+
+	id, _ := strconv.Atoi(c.Param("id"))
+
+	err := r.Put(context.TODO(), id)
+	if err != nil {
+		log.Println(err)
+	}
+	return c.String(http.StatusOK, "successful request")
+}
