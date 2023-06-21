@@ -5,6 +5,7 @@ import (
 
 	handler "github.com/IDL13/echo/internal/handlers"
 	"github.com/labstack/echo/v4"
+	"github.com/labstack/echo/v4/middleware"
 )
 
 type App struct {
@@ -28,6 +29,10 @@ func New() (*App, error) {
 	a.echo.DELETE("delete/:id", a.h.DeleteHandler)
 
 	a.echo.PUT("put/:id", a.h.PutHandler)
+
+	DefaulCorsConfig := middleware.DefaultCORSConfig
+
+	a.echo.Use(middleware.CORSWithConfig(DefaulCorsConfig))
 
 	return a, nil
 }
