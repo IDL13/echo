@@ -1,5 +1,5 @@
 run:
-	go run cmd/app/app.go
+	sh runproject.sh
 build:
 	docker-compose up --build
 makemigrations:
