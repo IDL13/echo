@@ -15,5 +15,5 @@ type Repository interface {
 	FindAll(ctx context.Context) (mas []Card, err error)
 	FindOne(ctx context.Context, number *unmarshal.Name) error
 	Delete(ctx context.Context, id int) error
-	Put(ctc context.Context, id int) error
+	Put(ctc context.Context, id int, card *encryption.Date) error
 }

@@ -119,9 +119,18 @@ func (h *Handler) DeleteHandler(c echo.Context) error {
 func (h *Handler) PutHandler(c echo.Context) error {
 	r := db.New()
 
+	h.d = encryption.New()
+	h.n = unmarshal.New()
+
+	date, err := h.d.Encryption(c)
+
+	if err != nil {
+		log.Fatal(err)
+	}
+
 	id, _ := strconv.Atoi(c.Param("id"))
 
-	err := r.Put(context.TODO(), id)
+	err = r.Put(context.TODO(), id, date)
 	if err != nil {
 		log.Println(err)
 	}

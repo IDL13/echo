@@ -121,18 +121,16 @@ func (r *repository) Delete(ctx context.Context, id int) error {
 	return nil
 }
 
-func (r *repository) Put(ctx context.Context, id int) error {
+func (r *repository) Put(ctx context.Context, id int, card *encryption.Date) error {
 	cfg := config.GetConf()
 	conn, err := postgresql.NewClient(*cfg)
 	if err != nil {
 		log.Fatal(err)
 	}
 
-	var card Card
+	q := `UPDATE public.card SET number = $2, date = $3, cvv = $4 WHERE id = $1`
 
-	q := `UPDATE public.card SET number = '1234345345', date = '12.01', cvv = '123' WHERE id = $1`
-
-	err = conn.QueryRow(ctx, q, id).Scan(&card.Number, &card.Date, &card.CVV)
+	err = conn.QueryRow(ctx, q, id, card.Number, card.Date, card.CVV).Scan(&card.Number, &card.Date, &card.CVV)
 	if err != nil {
 		utils.Loger(err)
 	}
