@@ -9,10 +9,11 @@ export function Form() {
     const date = document.getElementById('date') as HTMLInputElement
     const cvv = document.getElementById('cvv') as HTMLInputElement
 
-    const card = `"number":${number.value}, "date":${date.value},"CVV":${cvv.value}`
-    var Post = JSON.stringify(card)
+    const card = {"number" : number.value, "date" : date.value, "CVV" : cvv.value}
+    const Post = JSON.stringify(card)
+    console.log(Post)
     
-    axios.post("/addOne").then((r)=>{console.log(r)})
+    axios.post("/addOne", Post).then((r)=>{console.log(r.data)})
   }
 
   return (
