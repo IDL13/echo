@@ -1,13 +1,13 @@
 import { Section1 } from "../components/Section1";
-import { Put } from "../components/Put";
+import { Delete } from "../components/Delete";
 
-const Update = () => {
+const Del = () => {
     return(
         <>
         <Section1/>
-        <Put/>
+        <Delete/>
         </>
     )
 }
 
-export {Update};
+export {Del};

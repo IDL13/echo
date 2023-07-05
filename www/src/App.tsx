@@ -4,6 +4,7 @@ import { Link, Route, Routes } from 'react-router-dom';
 import { Update } from './pages/Update';
 import { Home } from './pages/Home';
 import { NotFound } from './pages/NotFound';
+import { Del } from './pages/Delete';
 
 
 function App() {
@@ -25,6 +26,7 @@ function App() {
     <Routes>
       <Route path = "/" element = {<Home/>}></Route>
       <Route path = "/update" element = {<Update/>}></Route>
+      <Route path = "/delete" element = {<Del/>}></Route>
       <Route path = "*" element = {<NotFound/>}></Route>
     </Routes>
     </>
