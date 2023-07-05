@@ -1,12 +1,36 @@
 import React from 'react';
 import {Form} from "./components/Form"
+import {Section1} from "./components/Section1"
+import { Footer } from './components/Footer';
+// import {Routes, Route} from "react-router-dom";
+
+// import {Rest} from "./pages/Rest";
+// import {Home} from "./pages/Home";
 
 function App() {
   return (
-    <div className='bg-neutral-900 bg-auto'>
-    <h4 className = "w-96 mt-auto ml-auto mb-auto mr-auto text-white p-8 text-2xl">Card Holder</h4>
+    <>
+    {/* <header>
+    <nav>
+      <li>
+      <a href = "/" className='text-center text-2xl text-white mx-9'> Rest </a>
+      </li>
+        <li>
+          <a href = "/rest" className='text-center text-2xl text-white mx-9'> Rest </a>
+        </li>
+      </nav>
+    </header> */}
+
+    <div>
+    <Section1 />
     <Form />
+    <Footer />
     </div>
+    {/* <Routes>
+    <Route path = "/" element = {<Home/>}></Route>
+      <Route path = "/rest" element = {<Rest/>}></Route>
+    </Routes> */}
+    </>
   )
 }
 
