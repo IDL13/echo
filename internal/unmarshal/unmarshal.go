@@ -16,6 +16,15 @@ func NewDate() *Date {
 	return &Date{}
 }
 
+func NewRedis() *Redis {
+	return &Redis{}
+}
+
+type Redis struct {
+	Key string `json:"key"`
+	Val string `json:"val"`
+}
+
 type Name struct {
 	Name string `json:"name"`
 }
@@ -51,4 +60,16 @@ func (d *Date) Unmarshal(c echo.Context) *Date {
 
 	err = json.Unmarshal(b, &d)
 	return d
+}
+
+func (r *Redis) Unmarshal(c echo.Context) *Redis {
+
+	defer c.Request().Body.Close()
+	b, err := ioutil.ReadAll(c.Request().Body)
+	if err != nil {
+		log.Printf("Failed reading the request body: %s", err)
+	}
+
+	err = json.Unmarshal(b, &r)
+	return r
 }

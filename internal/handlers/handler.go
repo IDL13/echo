@@ -23,6 +23,15 @@ type Handler struct {
 	n *unmarshal.Name
 }
 
+type RedisHandler struct {
+	r    *unmarshal.Redis
+	conn *redis
+}
+
+func (r *RedisHandler) SetHandler(c echo.Context) error {
+
+}
+
 func (h *Handler) StartHandler(c echo.Context) error {
 	err := c.String(http.StatusOK, "[SERVER STARTED]")
 	if err != nil {
