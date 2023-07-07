@@ -10,6 +10,7 @@ import (
 	"github.com/IDL13/echo/internal/encryption"
 	"github.com/IDL13/echo/internal/unmarshal"
 	"github.com/IDL13/echo/pkg/api"
+	"github.com/IDL13/echo/pkg/redis"
 	"github.com/labstack/echo/v4"
 	"google.golang.org/grpc"
 )
@@ -18,18 +19,32 @@ func New() *Handler {
 	return &Handler{}
 }
 
+func NewRedis() *RedisHandler {
+	return &RedisHandler{}
+}
+
 type Handler struct {
 	d *encryption.Date
 	n *unmarshal.Name
 }
 
 type RedisHandler struct {
-	r    *unmarshal.Redis
-	conn *redis
+	r *unmarshal.Redis
 }
 
 func (r *RedisHandler) SetHandler(c echo.Context) error {
+	conn := redis.Connection()
 
+	ctx := context.TODO()
+
+	r.r.Unmarshal(c)
+
+	err := conn.Set(ctx, r.r.Key, r.r.Val, 0).Err()
+	if err != nil {
+		log.Println("Error from Redi set")
+	}
+
+	return nil
 }
 
 func (h *Handler) StartHandler(c echo.Context) error {

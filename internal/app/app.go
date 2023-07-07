@@ -10,6 +10,7 @@ import (
 
 type App struct {
 	h    *handler.Handler
+	r    *handler.RedisHandler
 	echo *echo.Echo
 }
 
@@ -17,6 +18,7 @@ func New() (*App, error) {
 	a := &App{}
 
 	a.h = handler.New()
+	a.r = handler.NewRedis()
 	a.echo = echo.New()
 
 	a.echo.GET("/", a.h.StartHandler)
@@ -25,6 +27,7 @@ func New() (*App, error) {
 	a.echo.POST("/addOne", a.h.AddOneHandler)
 	a.echo.POST("/findOne", a.h.FindOneHandler)
 	a.echo.POST("/smtp", a.h.SmtpHandler)
+	a.echo.POST("/redis", a.r.SetHandler)
 
 	a.echo.DELETE("delete/:id", a.h.DeleteHandler)
 
