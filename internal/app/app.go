@@ -24,9 +24,12 @@ func New() (*App, error) {
 	a.echo.GET("/", a.h.StartHandler)
 	a.echo.GET("/findAll", a.h.FindAllHandler)
 
+	a.echo.GET("/redis/:key", a.r.GetHandler)
+
 	a.echo.POST("/addOne", a.h.AddOneHandler)
 	a.echo.POST("/findOne", a.h.FindOneHandler)
 	a.echo.POST("/smtp", a.h.SmtpHandler)
+
 	a.echo.POST("/redis", a.r.SetHandler)
 
 	a.echo.DELETE("delete/:id", a.h.DeleteHandler)

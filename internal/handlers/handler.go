@@ -2,6 +2,7 @@ package handler
 
 import (
 	"context"
+	"fmt"
 	"log"
 	"net/http"
 	"strconv"
@@ -43,6 +44,23 @@ func (r *RedisHandler) SetHandler(c echo.Context) error {
 	if err != nil {
 		log.Println("Error from Redi set")
 	}
+
+	return nil
+}
+
+func (r *RedisHandler) GetHandler(c echo.Context) error {
+	key := c.Param("key")
+
+	conn := redis.Connection()
+
+	ctx := context.TODO()
+
+	val, err := conn.Get(ctx, key).Result()
+	if err != nil {
+		log.Fatal("Error from redis GetHandler")
+	}
+
+	fmt.Println(val)
 
 	return nil
 }
