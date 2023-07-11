@@ -13,6 +13,7 @@ services:
       DB_HOST: "5435"
     depends_on:
       - db
+      - redis
 
   db:
     restart: always
@@ -26,3 +27,13 @@ services:
       - POSTGRES_PASSWORD=root
       - POSTGRES_USER=admin
       - POSTGRES_DB=postgres
+
+  redis:
+    restart: always
+    container_name: redisdb
+    ports:
+      - "6379:6379"
+    environment:
+      - REDIS_HOST=some-redis
+      - REIDS_PORT=6379
+    image: redis:latest

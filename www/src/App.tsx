@@ -6,6 +6,8 @@ import { Home } from './pages/Home';
 import { NotFound } from './pages/NotFound';
 import { Del } from './pages/Delete';
 import { Select } from './pages/SelectAll';
+import { RedisSet } from './pages/RedisSet'
+import { RedisGet } from './pages/RedisGet'
 
 
 function App() {
@@ -31,6 +33,8 @@ function App() {
       <Route path = "/update" element = {<Update/>}></Route>
       <Route path = "/delete" element = {<Del/>}></Route>
       <Route path = "/select_all" element = {<Select/>}></Route>
+      <Route path = "/redis_set" element = {<RedisSet/>}></Route>
+      <Route path = "/redis_get" element = {<RedisGet/>}></Route>
       <Route path = "*" element = {<NotFound/>}></Route>
     </Routes>
     </>
