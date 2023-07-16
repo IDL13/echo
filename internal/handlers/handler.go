@@ -33,6 +33,34 @@ type RedisHandler struct {
 	r *unmarshal.Redis
 }
 
+type Autorisation struct {
+	a *unmarshal.Auth
+}
+
+func (a *Autorisation) AuthHandler(c echo.Context) error {
+
+	a.a.Unmarshal(c)
+
+	r := db.New()
+
+	flag := r.FindOneById(context.TODO(), a.a)
+
+	if flag == 1 {
+		fmt.Println("user authorisation")
+	} else {
+		fmt.Println("user not authoristation")
+	}
+
+	return nil
+}
+
+func (a *Autorisation) RegHandler(c echo.Context) error {
+
+	a.a.Unmarshal(c)
+
+	return nil
+}
+
 func (r *RedisHandler) SetHandler(c echo.Context) error {
 	conn := redis.Connection()
 

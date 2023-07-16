@@ -20,9 +20,18 @@ func NewRedis() *Redis {
 	return &Redis{}
 }
 
+func NewAuth() *Auth {
+	return &Auth{}
+}
+
 type Redis struct {
 	Key string `json:"key"`
 	Val string `json:"val"`
+}
+
+type Auth struct {
+	UserName string `json:"username"`
+	Password string `json:"password"`
 }
 
 type Name struct {
@@ -32,6 +41,22 @@ type Name struct {
 type Date struct {
 	Email string `json:"email"`
 	Msg   string `json:"msg"`
+}
+
+func (a *Auth) Unmarshal(c echo.Context) *Auth {
+	defer c.Request().Body.Close()
+
+	b, err := ioutil.ReadAll(c.Request().Body)
+	if err != nil {
+		log.Printf("Fatal error from reading auth json. Error:%s", err)
+	}
+
+	err = json.Unmarshal(b, &a)
+	if err != nil {
+		log.Printf("Fatal error from unmarshaling auth json. Error:%s", err)
+	}
+
+	return nil
 }
 
 func (n *Name) Unmarshal(c echo.Context) *Name {

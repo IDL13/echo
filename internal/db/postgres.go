@@ -140,3 +140,23 @@ func (r *repository) Put(ctx context.Context, id int, card *encryption.Date) err
 
 	return nil
 }
+
+func (r *repository) FindOneById(ctx context.Context, auth *unmarshal.Auth) int8 {
+	cfg := config.GetConf()
+	conn, err := postgresql.NewClient(*cfg)
+	if err != nil {
+		log.Fatal(err)
+	}
+
+	var user User
+
+	q := `SELECT id FROM public.users WHERE username = $1`
+
+	err = conn.QueryRow(ctx, q, auth).Scan(&user.UserName, &user.Password)
+	if err != nil {
+		utils.Loger(err)
+		return 0
+	}
+
+	return 1
+}
