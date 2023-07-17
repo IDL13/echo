@@ -56,7 +56,7 @@ func (a *Auth) Unmarshal(c echo.Context) *Auth {
 		log.Printf("Fatal error from unmarshaling auth json. Error:%s", err)
 	}
 
-	return nil
+	return a
 }
 
 func (n *Name) Unmarshal(c echo.Context) *Name {

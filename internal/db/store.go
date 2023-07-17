@@ -17,4 +17,5 @@ type Repository interface {
 	Delete(ctx context.Context, id int) error
 	Put(ctx context.Context, id int, card *encryption.Date) error
 	FindOneById(ctx context.Context, auth *unmarshal.Auth) int8
+	InsertOneUser(ctx context.Context, auth *unmarshal.Auth) error
 }

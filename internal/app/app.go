@@ -19,6 +19,7 @@ func New() (*App, error) {
 	a := &App{}
 
 	a.h = handler.New()
+	a.a = handler.NewAuthorisation()
 	a.r = handler.NewRedis()
 	a.echo = echo.New()
 
@@ -30,8 +31,8 @@ func New() (*App, error) {
 	a.echo.POST("/addOne", a.h.AddOneHandler)
 	a.echo.POST("/findOne", a.h.FindOneHandler)
 	a.echo.POST("/smtp", a.h.SmtpHandler)
-	a.echo.POST("/autorisation", a.a.AuthHandler)
-	a.echo.POST("/registration", a.a.RegHandler)
+	a.echo.POST("/auth", a.a.AuthHandler)
+	a.echo.POST("/reg", a.a.RegHandler)
 
 	a.echo.POST("/redis", a.r.SetHandler)
 

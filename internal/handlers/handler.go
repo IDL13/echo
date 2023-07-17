@@ -24,6 +24,10 @@ func NewRedis() *RedisHandler {
 	return &RedisHandler{}
 }
 
+func NewAuthorisation() *Autorisation {
+	return &Autorisation{}
+}
+
 type Handler struct {
 	d *encryption.Date
 	n *unmarshal.Name
@@ -51,14 +55,22 @@ func (a *Autorisation) AuthHandler(c echo.Context) error {
 		fmt.Println("user not authoristation")
 	}
 
-	return nil
+	return c.String(http.StatusOK, "successful request")
 }
 
 func (a *Autorisation) RegHandler(c echo.Context) error {
 
-	a.a.Unmarshal(c)
+	date := a.a.Unmarshal(c)
 
-	return nil
+	r := db.New()
+
+	err := r.InsertOneUser(context.TODO(), date)
+
+	if err != nil {
+		fmt.Println("user not registration")
+	}
+
+	return c.String(http.StatusOK, "successful request")
 }
 
 func (r *RedisHandler) SetHandler(c echo.Context) error {

@@ -160,3 +160,28 @@ func (r *repository) FindOneById(ctx context.Context, auth *unmarshal.Auth) int8
 
 	return 1
 }
+
+func (r *repository) InsertOneUser(ctx context.Context, auth *unmarshal.Auth) error {
+	cfg := config.GetConf()
+	conn, err := postgresql.NewClient(*cfg)
+	if err != nil {
+		log.Fatal(err)
+	}
+
+	var user User
+
+	q := `INSERT INTO users (username, password) VALUES ($1, $2) RETURNING id`
+
+	err = conn.QueryRow(context.TODO(), q, user.UserName, user.Password).Scan(&user.UserName, &user.Password)
+	if err != nil {
+		var pgErr *pgconn.PgError
+		if errors.As(err, &pgErr) {
+			pgErr = err.(*pgconn.PgError)
+			newErr := fmt.Errorf(fmt.Sprintf("SQL Error: %s, Detail: %s, Where: %s, Code: %s, SQLState: %s", pgErr.Message, pgErr.Detail, pgErr.Where, pgErr.Code, pgErr.SQLState()))
+			return newErr
+		}
+
+		utils.Loger(err)
+	}
+	return nil
+}
