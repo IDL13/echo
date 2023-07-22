@@ -16,12 +16,6 @@ func New() *Date {
 	return &Date{}
 }
 
-type Date struct {
-	Number string `json:"number"`
-	Date   string `json:"date"`
-	CVV    string `json:"CVV"`
-}
-
 func (d *Date) Encryption(c echo.Context) (*Date, error) {
 	defer c.Request().Body.Close()
 	b, err := ioutil.ReadAll(c.Request().Body)

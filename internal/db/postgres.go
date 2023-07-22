@@ -168,11 +168,9 @@ func (r *repository) InsertOneUser(ctx context.Context, auth *unmarshal.Auth) er
 		log.Fatal(err)
 	}
 
-	var user User
-
 	q := `INSERT INTO users (username, password) VALUES ($1, $2) RETURNING id`
 
-	err = conn.QueryRow(context.TODO(), q, user.UserName, user.Password).Scan(&user.UserName, &user.Password)
+	err = conn.QueryRow(context.TODO(), q, auth.UserName, auth.Password).Scan(&auth.UserName, &auth.Password)
 	if err != nil {
 		var pgErr *pgconn.PgError
 		if errors.As(err, &pgErr) {

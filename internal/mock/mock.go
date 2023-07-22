@@ -37,6 +37,20 @@ func (m *MockRepository) EXPECT() *MockRepositoryMockRecorder {
 	return m.recorder
 }
 
+// Delete mocks base method.
+func (m *MockRepository) Delete(ctx context.Context, id int) error {
+	m.ctrl.T.Helper()
+	ret := m.ctrl.Call(m, "Delete", ctx, id)
+	ret0, _ := ret[0].(error)
+	return ret0
+}
+
+// Delete indicates an expected call of Delete.
+func (mr *MockRepositoryMockRecorder) Delete(ctx, id interface{}) *gomock.Call {
+	mr.mock.ctrl.T.Helper()
+	return mr.mock.ctrl.RecordCallWithMethodType(mr.mock, "Delete", reflect.TypeOf((*MockRepository)(nil).Delete), ctx, id)
+}
+
 // FindAll mocks base method.
 func (m *MockRepository) FindAll(ctx context.Context) ([]db.Card, error) {
 	m.ctrl.T.Helper()
@@ -66,6 +80,20 @@ func (mr *MockRepositoryMockRecorder) FindOne(ctx, number interface{}) *gomock.C
 	return mr.mock.ctrl.RecordCallWithMethodType(mr.mock, "FindOne", reflect.TypeOf((*MockRepository)(nil).FindOne), ctx, number)
 }
 
+// FindOneById mocks base method.
+func (m *MockRepository) FindOneById(ctx context.Context, auth *unmarshal.Auth) int8 {
+	m.ctrl.T.Helper()
+	ret := m.ctrl.Call(m, "FindOneById", ctx, auth)
+	ret0, _ := ret[0].(int8)
+	return ret0
+}
+
+// FindOneById indicates an expected call of FindOneById.
+func (mr *MockRepositoryMockRecorder) FindOneById(ctx, auth interface{}) *gomock.Call {
+	mr.mock.ctrl.T.Helper()
+	return mr.mock.ctrl.RecordCallWithMethodType(mr.mock, "FindOneById", reflect.TypeOf((*MockRepository)(nil).FindOneById), ctx, auth)
+}
+
 // Insert mocks base method.
 func (m *MockRepository) Insert(ctx context.Context, card *encryption.Date) error {
 	m.ctrl.T.Helper()
@@ -78,4 +106,32 @@ func (m *MockRepository) Insert(ctx context.Context, card *encryption.Date) erro
 func (mr *MockRepositoryMockRecorder) Insert(ctx, card interface{}) *gomock.Call {
 	mr.mock.ctrl.T.Helper()
 	return mr.mock.ctrl.RecordCallWithMethodType(mr.mock, "Insert", reflect.TypeOf((*MockRepository)(nil).Insert), ctx, card)
+}
+
+// InsertOneUser mocks base method.
+func (m *MockRepository) InsertOneUser(ctx context.Context, auth *unmarshal.Auth) error {
+	m.ctrl.T.Helper()
+	ret := m.ctrl.Call(m, "InsertOneUser", ctx, auth)
+	ret0, _ := ret[0].(error)
+	return ret0
+}
+
+// InsertOneUser indicates an expected call of InsertOneUser.
+func (mr *MockRepositoryMockRecorder) InsertOneUser(ctx, auth interface{}) *gomock.Call {
+	mr.mock.ctrl.T.Helper()
+	return mr.mock.ctrl.RecordCallWithMethodType(mr.mock, "InsertOneUser", reflect.TypeOf((*MockRepository)(nil).InsertOneUser), ctx, auth)
+}
+
+// Put mocks base method.
+func (m *MockRepository) Put(ctx context.Context, id int, card *encryption.Date) error {
+	m.ctrl.T.Helper()
+	ret := m.ctrl.Call(m, "Put", ctx, id, card)
+	ret0, _ := ret[0].(error)
+	return ret0
+}
+
+// Put indicates an expected call of Put.
+func (mr *MockRepositoryMockRecorder) Put(ctx, id, card interface{}) *gomock.Call {
+	mr.mock.ctrl.T.Helper()
+	return mr.mock.ctrl.RecordCallWithMethodType(mr.mock, "Put", reflect.TypeOf((*MockRepository)(nil).Put), ctx, id, card)
 }

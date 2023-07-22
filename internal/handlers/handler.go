@@ -28,19 +28,6 @@ func NewAuthorisation() *Autorisation {
 	return &Autorisation{}
 }
 
-type Handler struct {
-	d *encryption.Date
-	n *unmarshal.Name
-}
-
-type RedisHandler struct {
-	r *unmarshal.Redis
-}
-
-type Autorisation struct {
-	a *unmarshal.Auth
-}
-
 func (a *Autorisation) AuthHandler(c echo.Context) error {
 
 	a.a.Unmarshal(c)
