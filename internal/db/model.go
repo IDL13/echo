@@ -7,6 +7,7 @@ type Card struct {
 }
 
 type User struct {
+	ID       int
 	UserName string `json:"username"`
 	Password string `json:"password"`
 }

@@ -134,14 +134,11 @@ func (r *repository) Put(ctx context.Context, id int, card *encryption.Date) err
 	if err != nil {
 		utils.Loger(err)
 	}
-	fmt.Printf("Number:%s", card.Number)
-	fmt.Printf("Date:%s", card.Number)
-	fmt.Printf("CVV:%s", card.Number)
 
 	return nil
 }
 
-func (r *repository) FindOneById(ctx context.Context, auth *unmarshal.Auth) int8 {
+func (r *repository) FindOneById(ctx context.Context, auth *unmarshal.Auth) (int8, int) {
 	cfg := config.GetConf()
 	conn, err := postgresql.NewClient(*cfg)
 	if err != nil {
@@ -150,15 +147,15 @@ func (r *repository) FindOneById(ctx context.Context, auth *unmarshal.Auth) int8
 
 	var user User
 
-	q := `SELECT id FROM public.users WHERE username = $1`
+	q := `SELECT id FROM public.users WHERE username = $1 and password = $2`
 
-	err = conn.QueryRow(ctx, q, auth).Scan(&user.UserName, &user.Password)
+	err = conn.QueryRow(ctx, q, auth.UserName, auth.Password).Scan(&user.UserName, &user.Password, &auth.ID)
 	if err != nil {
 		utils.Loger(err)
-		return 0
+		return 0, 0
 	}
 
-	return 1
+	return 1, auth.ID
 }
 
 func (r *repository) InsertOneUser(ctx context.Context, auth *unmarshal.Auth) error {

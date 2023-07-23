@@ -5,15 +5,22 @@ import (
 	"fmt"
 	"log"
 	"net/http"
+	"os"
 	"strconv"
+	"time"
 
 	"github.com/IDL13/echo/internal/db"
 	"github.com/IDL13/echo/internal/encryption"
 	"github.com/IDL13/echo/internal/unmarshal"
 	"github.com/IDL13/echo/pkg/api"
 	"github.com/IDL13/echo/pkg/redis"
+	"github.com/dgrijalva/jwt-go"
 	"github.com/labstack/echo/v4"
 	"google.golang.org/grpc"
+)
+
+const (
+	tokenTTL = 12 * time.Hour
 )
 
 func New() *Handler {
@@ -34,15 +41,28 @@ func (a *Autorisation) AuthHandler(c echo.Context) error {
 
 	r := db.New()
 
-	flag := r.FindOneById(context.TODO(), a.a)
+	flag, id := r.FindOneById(context.TODO(), a.a)
 
 	if flag == 1 {
-		fmt.Println("user authorisation")
-	} else {
-		fmt.Println("user not authoristation")
-	}
+		token := jwt.NewWithClaims(jwt.SigningMethodHS256, &jwt.StandardClaims{
+			ExpiresAt: time.Now().Add(tokenTTL).Unix(),
+			IssuedAt:  time.Now().Unix(),
+		})
 
-	return c.String(http.StatusOK, "successful request")
+		token.SignedString([]byte(os.Getenv("SALT")))
+
+		conn := redis.Connection()
+
+		ctx := context.TODO()
+
+		err := conn.Set(ctx, strconv.Itoa(id), token, 0).Err()
+		if err != nil {
+			log.Println("Error from Redi set")
+		}
+		return c.String(http.StatusOK, "successful request")
+	} else {
+		return c.String(http.StatusOK, "Bad request")
+	}
 }
 
 func (a *Autorisation) RegHandler(c echo.Context) error {

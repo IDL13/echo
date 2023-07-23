@@ -6,6 +6,7 @@ type Redis struct {
 }
 
 type Auth struct {
+	ID       int
 	UserName string `json:"username"`
 	Password string `json:"password"`
 }

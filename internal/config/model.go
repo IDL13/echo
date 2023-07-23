@@ -7,3 +7,7 @@ type Config struct {
 	Port     string `yaml:"port"`
 	Database string `yaml:"database"`
 }
+
+type SALT struct {
+	SALT string `yaml:"SALT"`
+}
