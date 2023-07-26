@@ -5,6 +5,7 @@ import (
 	"io/ioutil"
 	"log"
 
+	"github.com/IDL13/echo/internal/encryption"
 	"github.com/labstack/echo/v4"
 )
 
@@ -24,7 +25,25 @@ func NewAuth() *Auth {
 	return &Auth{}
 }
 
-func (a *Auth) Unmarshal(c echo.Context) *Auth {
+func (a *Auth) UnmarshalFoReg(c echo.Context) *Auth {
+	defer c.Request().Body.Close()
+
+	b, err := ioutil.ReadAll(c.Request().Body)
+	if err != nil {
+		log.Printf("Fatal error from reading auth json. Error:%s", err)
+	}
+
+	err = json.Unmarshal(b, &a)
+	if err != nil {
+		log.Printf("Fatal error from unmarshaling auth json. Error:%s", err)
+	}
+
+	a.Password = encryption.PassHashing(a.Password)
+
+	return a
+}
+
+func (a *Auth) UnmarshalFoAuth(c echo.Context) *Auth {
 	defer c.Request().Body.Close()
 
 	b, err := ioutil.ReadAll(c.Request().Body)

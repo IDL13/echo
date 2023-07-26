@@ -92,9 +92,6 @@ func (r *repository) FindOne(ctx context.Context, number *unmarshal.Name) error 
 	if err != nil {
 		utils.Loger(err)
 	}
-	fmt.Printf("Number:%s", card.Number)
-	fmt.Printf("Date:%s", card.Number)
-	fmt.Printf("CVV:%s", card.Number)
 
 	return nil
 }
@@ -114,9 +111,6 @@ func (r *repository) Delete(ctx context.Context, id int) error {
 	if err != nil {
 		utils.Loger(err)
 	}
-	fmt.Printf("Number:%s", card.Number)
-	fmt.Printf("Date:%s", card.Number)
-	fmt.Printf("CVV:%s", card.Number)
 
 	return nil
 }
@@ -138,24 +132,39 @@ func (r *repository) Put(ctx context.Context, id int, card *encryption.Date) err
 	return nil
 }
 
-func (r *repository) FindOneById(ctx context.Context, auth *unmarshal.Auth) (int8, int) {
+func (r *repository) FindOneById(ctx context.Context, auth *unmarshal.Auth) (int, int) {
 	cfg := config.GetConf()
 	conn, err := postgresql.NewClient(*cfg)
 	if err != nil {
 		log.Fatal(err)
 	}
 
+	var hashPassword string
+
+	sql := `SELECT password FROM public.users WHERE username = $1`
+
+	err = conn.QueryRow(ctx, sql, auth.UserName).Scan(&hashPassword)
+	if err != nil {
+		fmt.Println("error from geting hash password")
+	}
+
 	var user User
 
-	q := `SELECT id FROM public.users WHERE username = $1 and password = $2`
-
-	err = conn.QueryRow(ctx, q, auth.UserName, auth.Password).Scan(&user.UserName, &user.Password, &auth.ID)
+	err = encryption.CheckPassword(hashPassword, auth.Password)
 	if err != nil {
-		utils.Loger(err)
 		return 0, 0
 	}
 
-	return 1, auth.ID
+	q := `SELECT id FROM public.users WHERE username = $1 and password = $2`
+
+	err = conn.QueryRow(ctx, q, auth.UserName, hashPassword).Scan(&user.Id)
+	if err != nil {
+		utils.Loger(err)
+	}
+
+	fmt.Println(user.Id)
+
+	return 1, user.Id
 }
 
 func (r *repository) InsertOneUser(ctx context.Context, auth *unmarshal.Auth) error {
@@ -178,5 +187,6 @@ func (r *repository) InsertOneUser(ctx context.Context, auth *unmarshal.Auth) er
 
 		utils.Loger(err)
 	}
+
 	return nil
 }

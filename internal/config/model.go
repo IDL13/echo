@@ -8,6 +8,3 @@ type Config struct {
 	Database string `yaml:"database"`
 }
 
-type SALT struct {
-	SALT string `yaml:"SALT"`
-}

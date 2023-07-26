@@ -1,1 +1,1 @@
-INFO/t2023/07/22 18:13:50 no rows in result set
+INFO/t2023/07/25 18:19:57 number of field descriptions must equal number of destinations, got 1 and 2

@@ -37,17 +37,24 @@ func NewAuthorisation() *Autorisation {
 
 func (a *Autorisation) AuthHandler(c echo.Context) error {
 
-	a.a.Unmarshal(c)
+	user := a.a.UnmarshalFoAuth(c)
 
 	r := db.New()
 
-	flag, id := r.FindOneById(context.TODO(), a.a)
+	flag, id := r.FindOneById(context.TODO(), user)
 
 	if flag == 1 {
 		token := jwt.NewWithClaims(jwt.SigningMethodHS256, &jwt.StandardClaims{
 			ExpiresAt: time.Now().Add(tokenTTL).Unix(),
 			IssuedAt:  time.Now().Unix(),
 		})
+
+		// err := godotenv.Load()
+		// if err != nil {
+		// 	log.Println(".env is empty")
+		// }
+
+		encryption.LoadDotenv()
 
 		token.SignedString([]byte(os.Getenv("SALT")))
 
@@ -67,11 +74,11 @@ func (a *Autorisation) AuthHandler(c echo.Context) error {
 
 func (a *Autorisation) RegHandler(c echo.Context) error {
 
-	date := a.a.Unmarshal(c)
+	user := a.a.UnmarshalFoReg(c)
 
 	r := db.New()
 
-	err := r.InsertOneUser(context.TODO(), date)
+	err := r.InsertOneUser(context.TODO(), user)
 
 	if err != nil {
 		fmt.Println("user not registration")
