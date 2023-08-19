@@ -49,11 +49,6 @@ func (a *Autorisation) AuthHandler(c echo.Context) error {
 			IssuedAt:  time.Now().Unix(),
 		})
 
-		// err := godotenv.Load()
-		// if err != nil {
-		// 	log.Println(".env is empty")
-		// }
-
 		encryption.LoadDotenv()
 
 		token.SignedString([]byte(os.Getenv("SALT")))
@@ -64,7 +59,7 @@ func (a *Autorisation) AuthHandler(c echo.Context) error {
 
 		err := conn.Set(ctx, strconv.Itoa(id), token, 0).Err()
 		if err != nil {
-			log.Println("Error from Redi set")
+			log.Println("Error from Redis set")
 		}
 		return c.String(http.StatusOK, "successful request")
 	} else {
@@ -92,9 +87,9 @@ func (r *RedisHandler) SetHandler(c echo.Context) error {
 
 	ctx := context.TODO()
 
-	r.r.Unmarshal(c)
+	redisDate := r.r.Unmarshal(c)
 
-	err := conn.Set(ctx, r.r.Key, r.r.Val, 0).Err()
+	err := conn.Set(ctx, redisDate.Key, redisDate.Val, 0).Err()
 	if err != nil {
 		log.Println("Error from Redi set")
 	}

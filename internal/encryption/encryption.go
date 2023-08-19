@@ -4,7 +4,6 @@ import (
 	"encoding/json"
 	"io/ioutil"
 	"log"
-	"os"
 
 	"github.com/joho/godotenv"
 	"github.com/labstack/echo/v4"
@@ -16,7 +15,7 @@ func New() *Date {
 }
 
 func LoadDotenv() {
-	err := godotenv.Load()
+	err := godotenv.Load("./../.env")
 	if err != nil {
 		log.Println(".env is empty")
 	}
@@ -40,7 +39,7 @@ func (d *Date) Encryption(c echo.Context) (*Date, error) {
 
 	cvvHash, _ := bcrypt.GenerateFromPassword(cvv, cost)
 
-	d.CVV = os.Getenv("SALT1") + string(cvvHash) + os.Getenv("SALT2")
+	d.CVV = string(cvvHash)
 
 	if err != nil {
 		log.Printf("Failed unmarsheling: %s", err)
